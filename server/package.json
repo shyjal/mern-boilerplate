@@ -3,16 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "12.16.1"
-  },
   "scripts": {
     "start-prod": "npm run build && node ./build/index.js",
     "build": "npm run clean && npm run build-babel",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./src -s",
-    "start-dev": "node --exec babel-node src/index.js",
-    "server": "nodemon --exec babel-node src/index.js",
+    "start": "nodemon --exec babel-node ./src/index.js",
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },

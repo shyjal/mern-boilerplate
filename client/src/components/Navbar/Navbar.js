@@ -1,15 +1,18 @@
 import React from 'react';
 import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 
 import { logOutUser } from '../../store/actions/authActions';
 import './styles.css';
 
-const Navbar = ({ auth, logOutUser, history }) => {
+const Navbar = ({ history }) => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
   const onLogOut = (event) => {
     event.preventDefault();
-    logOutUser(history);
+    dispatch(logOutUser(history));
   };
 
   return (
@@ -52,8 +55,4 @@ const Navbar = ({ auth, logOutUser, history }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-export default compose(withRouter, connect(mapStateToProps, { logOutUser }))(Navbar);
+export default Navbar;

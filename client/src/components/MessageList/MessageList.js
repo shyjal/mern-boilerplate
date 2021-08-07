@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Message from '../Message/Message';
 import Loader from '../Loader/Loader';
@@ -7,9 +7,12 @@ import Loader from '../Loader/Loader';
 import { getMessages } from '../../store/actions/messageActions';
 import './styles.css';
 
-const MessageList = ({ getMessages, message: { messages, isLoading, error } }) => {
+const MessageList = () => {
+  const dispatch = useDispatch();
+  const { messages, isLoading, error } = useSelector((state) => state.message);
+
   useEffect(() => {
-    getMessages();
+    dispatch(getMessages());
   }, []);
 
   return (
@@ -31,8 +34,4 @@ const MessageList = ({ getMessages, message: { messages, isLoading, error } }) =
   );
 };
 
-const mapStateToProps = (state) => ({
-  message: state.message,
-});
-
-export default connect(mapStateToProps, { getMessages })(MessageList);
+export default MessageList;

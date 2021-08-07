@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 
 import { addMessage } from '../../store/actions/messageActions';
@@ -7,14 +7,17 @@ import { messageFormSchema } from './validation';
 
 import './styles.css';
 
-const MessageForm = ({ addMessage, message: { messages } }) => {
+const MessageForm = () => {
+  const dispatch = useDispatch();
+  const { messages } = useSelector((state) => state.message);
+
   const formik = useFormik({
     initialValues: {
       text: '',
     },
     validationSchema: messageFormSchema,
     onSubmit: (values, { resetForm }) => {
-      addMessage({ text: values.text });
+      dispatch(addMessage({ text: values.text }));
       resetForm();
     },
   });
@@ -44,8 +47,4 @@ const MessageForm = ({ addMessage, message: { messages } }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  message: state.message,
-});
-
-export default connect(mapStateToProps, { addMessage })(MessageForm);
+export default MessageForm;

@@ -57,23 +57,12 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-console.log(join(__dirname, '../..', process.env.IMAGES_FOLDER_PATH));
-
 userSchema.methods.toJSON = function () {
-  // if not exists avatar1 default
-  const absoluteAvatarFilePath = `${join(__dirname, '../..', process.env.IMAGES_FOLDER_PATH)}${this.avatar}`;
-  const avatar = isValidUrl(this.avatar)
-    ? this.avatar
-    : fs.existsSync(absoluteAvatarFilePath)
-    ? `${process.env.IMAGES_FOLDER_PATH}${this.avatar}`
-    : `${process.env.IMAGES_FOLDER_PATH}avatar2.jpg`;
-
   return {
     id: this._id,
     provider: this.provider,
     email: this.email,
     username: this.username,
-    avatar: avatar,
     name: this.name,
     role: this.role,
     createdAt: this.createdAt,

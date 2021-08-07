@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { useFormik } from 'formik';
@@ -9,13 +10,17 @@ import { messageFormSchema } from './validation';
 
 import './styles.css';
 
-const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError }) => {
+const Message = () => {
   const [isEdit, setIsEdit] = useState(false);
+
+  const dispatch = useDispatch();
+  const message = useSelector((state) => state.message);
+  const auth = useSelector((state) => state.auth);
 
   const handleDelete = (e, id) => {
     e.preventDefault();
     if (!isEdit) {
-      deleteMessage(id);
+      dispatch(deleteMessage(id));
     }
   };
 
@@ -33,7 +38,7 @@ const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError 
     },
     validationSchema: messageFormSchema,
     onSubmit: (values, { resetForm }) => {
-      editMessage(values.id, { text: values.text });
+      dispatch(editMessage(values.id, { text: values.text }));
       setIsEdit(false);
       // resetForm();
     },
@@ -106,7 +111,7 @@ const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError 
                 <button
                   onClick={() => {
                     setIsEdit((oldIsEdit) => !oldIsEdit);
-                    clearMessageError(message.id);
+                    dispatch(clearMessageError(message.id));
                   }}
                   type="button"
                   className="btn"
@@ -122,8 +127,4 @@ const Message = ({ message, auth, deleteMessage, editMessage, clearMessageError 
   );
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-export default connect(mapStateToProps, { deleteMessage, editMessage, clearMessageError })(Message);
+export default Message;
