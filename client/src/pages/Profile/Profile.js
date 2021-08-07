@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useFormik } from 'formik';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 
 import { getProfile, editUser, deleteUser } from '../../store/actions/userActions';
-import { loadMe } from '../../store/actions/authActions';
 import Layout from '../../layout/Layout';
 import Loader from '../../components/Loader/Loader';
 import requireAuth from '../../hoc/requireAuth';
@@ -34,24 +33,19 @@ import './styles.css';
 // FACEBOOK_CALLBACK_URL=https://mern-boilerplate-demo.herokuapp.com/auth/facebook/callback
 // da bi prihvatio fb domen mora dole da se poklapa sa siteurl
 
-const Profile = ({
-  getProfile,
-  user: { profile, isLoading, error },
-  auth: { me },
-  editUser,
-  deleteUser,
-  loadMe,
-  history,
-  match,
-}) => {
+const Profile = ({ history, match }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const retryCount = useRef(0);
   const matchUsername = match.params.username;
 
+  const dispatch = useDispatch();
+  const { me } = useSelector((state) => state.auth);
+  const { profile, isLoading, error } = useSelector((state) => state.user);
+
   useEffect(() => {
-    getProfile(matchUsername, history);
+    dispatch(getProfile(matchUsername, history));
   }, [matchUsername]);
 
   // if changed his own username reload me, done in userActions
@@ -73,7 +67,7 @@ const Profile = ({
   };
 
   const handleDeleteUser = (id, history) => {
-    deleteUser(id, history);
+    dispatch(deleteUser(id, history));
   };
 
   const formik = useFormik({
@@ -93,7 +87,7 @@ const Profile = ({
       if (profile.provider === 'email') {
         formData.append('password', values.password);
       }
-      editUser(values.id, formData, history);
+      dispatch(editUser(values.id, formData, history));
       //setIsEdit(false);
     },
   });
@@ -239,13 +233,4 @@ const Profile = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  user: state.user,
-  auth: state.auth,
-});
-
-export default compose(
-  requireAuth,
-  withRouter,
-  connect(mapStateToProps, { getProfile, editUser, deleteUser, loadMe }),
-)(Profile);
+export default Profile;

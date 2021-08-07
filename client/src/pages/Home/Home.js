@@ -1,6 +1,5 @@
 import React from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import Layout from '../../layout/Layout';
@@ -23,9 +22,12 @@ const ReseedMessage = ({ handleReseed }) => {
   );
 };
 
-const Home = ({ auth, reseedDatabase }) => {
+const Home = () => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
   const handleReseed = () => {
-    reseedDatabase();
+    dispatch(reseedDatabase());
   };
 
   return (
@@ -61,8 +63,4 @@ const Home = ({ auth, reseedDatabase }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-export default compose(connect(mapStateToProps, { reseedDatabase }))(Home);
+export default Home;

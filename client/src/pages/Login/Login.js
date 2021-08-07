@@ -3,8 +3,7 @@ import { Link, withRouter, Redirect } from 'react-router-dom';
 
 import { useFormik } from 'formik';
 
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 
 import { loginUserWithEmail } from '../../store/actions/authActions';
@@ -12,7 +11,10 @@ import { FACEBOOK_AUTH_LINK, GOOGLE_AUTH_LINK } from '../../constants';
 import { loginSchema } from './validation';
 import './styles.css';
 
-const Login = ({ auth, history, loginUserWithEmail }) => {
+const Login = ({ history }) => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -20,7 +22,7 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      loginUserWithEmail(values, history);
+      dispatch(loginUserWithEmail(values, history));
     },
   });
 
@@ -96,9 +98,4 @@ const Login = ({ auth, history, loginUserWithEmail }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-  errors: state.errors,
-});
-
-export default compose(withRouter, connect(mapStateToProps, { loginUserWithEmail }))(Login);
+export default Login;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import _ from 'lodash';
 
 import { useFormik } from 'formik';
@@ -11,7 +11,11 @@ import { registerUserWithEmail } from '../../store/actions/registerActions';
 import { registerSchema } from './validation';
 import './styles.css';
 
-const Register = ({ auth, register: { isLoading, error }, history, registerUserWithEmail }) => {
+const Register = ({ history }) => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const { isLoading, error } = useSelector((state) => state.register);
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -21,7 +25,7 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
     },
     validationSchema: registerSchema,
     onSubmit: (values) => {
-      registerUserWithEmail(values, history);
+      dispatch(registerUserWithEmail(values, history));
     },
   });
 
@@ -107,9 +111,4 @@ const Register = ({ auth, register: { isLoading, error }, history, registerUserW
   );
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-  register: state.register,
-});
-
-export default compose(withRouter, connect(mapStateToProps, { registerUserWithEmail }))(Register);
+export default Register;

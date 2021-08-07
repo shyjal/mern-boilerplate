@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -11,9 +11,12 @@ import requireAuth from '../../hoc/requireAuth';
 
 import './styles.css';
 
-const Users = ({ getUsers, users: { users, isLoading } }) => {
+const Users = () => {
+  const dispatch = useDispatch();
+  const { users, isLoading } = useSelector((state) => state.users);
+
   useEffect(() => {
-    getUsers();
+    dispatch(getUsers());
   }, []);
 
   return (
@@ -76,8 +79,4 @@ const Users = ({ getUsers, users: { users, isLoading } }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  users: state.users,
-});
-
-export default compose(requireAuth, connect(mapStateToProps, { getUsers }))(Users);
+export default Users;

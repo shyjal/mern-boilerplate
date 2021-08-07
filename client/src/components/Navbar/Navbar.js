@@ -1,5 +1,4 @@
 import React from 'react';
-import { compose } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 

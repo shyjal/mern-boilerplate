@@ -1,22 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Layout } from 'antd';
 
 import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
 import './styles.css';
 
-const Layout = ({ children }) => {
+const RootLayout = ({ children }) => {
   return (
-    <>
+    <Layout>
       <Navbar />
-      <div className="container">{children}</div>
+      <Layout.Content>{children}</Layout.Content>
       <Footer />
-    </>
+    </Layout>
   );
 };
 
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export default Layout;
+export default RootLayout;
