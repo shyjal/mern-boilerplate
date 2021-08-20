@@ -1,0 +1,30 @@
+{
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "sourceType": "module",
+      "allowImportExportEverywhere": false,
+      "codeFrame": false
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended",
+      "plugin:react/recommended"
+    ],
+    "plugins": ["react", "jsx-a11y", "import", "prettier"],
+    "env": {
+      "browser": true,
+      "jest": true,
+      "es6": true
+    },
+    "rules": {
+      "react/jsx-uses-vars": "error",
+      "react/jsx-uses-react": "error",
+      "max-len": ["error", { "code": 100 }],
+      "prefer-promise-reject-errors": ["off"],
+      "react/jsx-filename-extension": ["off"],
+      "react/prop-types": ["warn"],
+      "no-return-assign": ["off"],
+      "prettier/prettier": ["error", { "singleQuote": true }]
+    }
+  }
+  
