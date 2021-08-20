@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 
 import Login from './pages/Login/Login';
@@ -16,9 +15,13 @@ import Loader from './components/Loader/Loader';
 
 import { logInUserWithOauth, loadMe } from './store/actions/authActions';
 
-const App = ({ logInUserWithOauth, auth, loadMe }) => {
+const App = () => {
+  const dispatch = useDispatch();
+
+  const auth = useSelector((state) => state.auth);
+
   useEffect(() => {
-    loadMe();
+    dispatch(loadMe());
   }, [loadMe]);
 
   //redosled hookova
@@ -28,7 +31,7 @@ const App = ({ logInUserWithOauth, auth, loadMe }) => {
     const cookieJwt = Cookies.get('x-auth-cookie');
     if (cookieJwt) {
       Cookies.remove('x-auth-cookie');
-      logInUserWithOauth(cookieJwt);
+      dispatch(logInUserWithOauth(cookieJwt));
     }
   }, []);
 
@@ -58,8 +61,4 @@ const App = ({ logInUserWithOauth, auth, loadMe }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.auth,
-});
-
-export default compose(connect(mapStateToProps, { logInUserWithOauth, loadMe }))(App);
+export default App;
